@@ -1,0 +1,437 @@
+/* 基础样式 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    overflow-y: auto;
+}
+
+#background-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transition: background-image 0.5s ease, background 0.5s ease;
+}
+
+.home {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    font-size: 3em;
+    font-weight: bold;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* 底部容器样式 */
+.bottom-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 20;
+}
+
+/* Dock指示器样式 */
+.dock-indicator {
+    position: fixed;
+    /*bottom: calc(100% - 20px);*/
+    justify-content: center;
+    bottom: 120px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    color: white;
+    font-size: 1.3rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    display: none;
+    animation: blink 2s infinite;
+    z-index: 21;
+    width: fit-content;
+}
+
+.dock-indicator.desktop {
+    display: block;
+}
+
+.dock-indicator.mobile {
+    display: none;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Dock栏样式 */
+.dock {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 17px;
+    padding: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.dock-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.dock-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    padding: 5px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    background-color: white;
+}
+
+.dock-icon:hover {
+    transform: scale(1.2) translateY(-10px);
+    background: white;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* 左侧Dock Logo容器样式 */
+.logo-dock-container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 17px;
+    padding: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    height: 60px;
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.logo-dock-container:hover {
+    background: rgba(255, 255, 255, 1);
+}
+
+.dock-logo {
+    height: 55px;
+    width: 55px;
+    object-fit: contain;
+}
+
+/* 时间容器样式 */
+.time-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 17px;
+    padding: 12px 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    height: 60px;
+    min-width: 120px;
+}
+
+/* 顶部Logo容器样式 */
+.logo-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+}
+
+.logo {
+    height: 2rem;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
+    z-index: 5;
+}
+
+.hitokoto-text {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: white;
+    font-size: 0.9rem;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    z-index: 10;
+    max-width: 500px;
+    text-align: right;
+}
+
+.hitokoto-text:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#current-time {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+#current-date {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.home-container {
+    position: absolute;
+    top: 300px; /* 调整为固定像素值 */
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    z-index: 1;
+    margin-bottom: 200px; /* 添加底部间距 */
+}
+
+.home-container h1 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.home-container form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.home-container input {
+    width: 70%;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 25px 0 0 25px;
+    font-size: 1rem;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.home-container input:focus {
+    background: white;
+    color: #333;
+}
+
+.home-container input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.home-container button {
+    padding: 12px 20px;
+    background: rgba(69, 125, 212, 0.7);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 0 25px 25px 0;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.home-container button:hover {
+    background: rgba(15, 110, 190, 0.8);
+    transform: scale(1.05);
+}
+
+/* 信息面板样式 */
+.info-panel {
+    position: absolute;
+    bottom: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    /*min-width: 300px;*/
+    z-index: 5;
+}
+
+/* 添加内容容器样式 */
+.content-container {
+    min-height: calc(100vh - 300px); /* 确保足够滚动空间 */
+    padding-bottom: 200px; /* 底部留白 */
+}
+
+.info-content {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.info-panel-title {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    margin: 0;
+    padding: 15px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 6;
+}
+
+.info-content {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.info-content h2 {
+    margin: 0;
+    padding: 15px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.info-text {
+    padding-bottom: 15px;
+}
+
+.info-more {
+    padding-top: 15px;
+}
+
+/*主页内容样式*/
+.home-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 150%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.5rem;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(3px);
+    border-radius: 17px;
+    padding: 12px 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    height: 60px;
+    min-width: 400px;
+    z-index: 1;
+}
+
+.home-content h1 {
+    margin-bottom: 20px;
+}
+
+.home-content p {
+    margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .bottom-container {
+        gap: 20px;
+    }
+    
+    .logo-dock-container,
+    .dock,
+    .time-container {
+        height: 50px;
+    }
+    
+    .logo-dock-container {
+        width: 50px;
+        padding: 8px;
+    }
+    
+    .dock-logo {
+        height: 35px;
+        width: 35px;
+    }
+    
+    .time-container {
+        min-width: 100px;
+        padding: 8px 12px;
+    }
+    
+    #current-time {
+        font-size: 1rem;
+    }
+    
+    #current-date {
+        font-size: 0.6rem;
+    }
+
+    .home-container {
+        top: 25%;
+        padding: 0 20px;
+    }
+
+    .home-container input {
+        width: 60%;
+    }
+
+    .dock-indicator.desktop {
+        display: none;
+    }
+    
+    .dock-indicator.mobile {
+        display: block;
+    }
+}
