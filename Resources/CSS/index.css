@@ -170,7 +170,7 @@ body::before {
 .dock-indicator {
     position: absolute;
     justify-content: center;
-    bottom: 200px;
+    bottom: 180px;
     left: 0;
     right: 0;
     margin: 0 auto;
@@ -576,11 +576,38 @@ body::before {
     stroke: rgba(255, 255, 255, 0.2);
 }
 
+@keyframes progress-load {
+    0% {
+        stroke-dashoffset: 251;
+    }
+    100% {
+        stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
+    }
+}
+
+@keyframes progress-unload {
+    0% {
+        stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
+    }
+    100% {
+        stroke-dashoffset: 251;
+    }
+}
+
 .circular-fill {
     stroke-dasharray: 251;
-    stroke-dashoffset: 251;
-    animation: progress 1.5s ease-out forwards;
+    /* 初始值由JS设置 */
+    animation: progress-load 1.5s ease-out forwards;
     animation-delay: 0.3s;
+    transition: stroke-dashoffset 0.8s ease-in-out;
+}
+
+.progress-load {
+    animation: progress-load 1.5s ease-out forwards;
+}
+
+.progress-unload {
+    animation: progress-unload 0.8s ease-in forwards;
 }
 
 .progress-value {
@@ -617,24 +644,42 @@ body::before {
     stroke: #FF9F40;
 }
 
-/* 增强进度条动画 */
-@keyframes progress {
+/* 简化进度条动画 */
+.circular-fill {
+    stroke-dasharray: 251;
+    stroke-dashoffset: 251;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: stroke-dashoffset 1s ease-out;
+}
+
+.circular-fill.progress-load {
+    stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
+}
+
+.circular-fill.progress-unload {
+    stroke-dashoffset: 251;
+}
+
+/* 进度条回退动画 */
+@keyframes progress-unload {
     0% {
+        stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
+        opacity: 1;
+        transform: rotate(-90deg) scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: rotate(-90deg) scale(1.05);
+    }
+    100% {
         stroke-dashoffset: 251;
         opacity: 0;
         transform: rotate(-90deg) scale(0.8);
     }
-    50% {
-        opacity: 1;
-        transform: rotate(-90deg) scale(1.05);
-    }
-    100% {
-        stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
-        transform: rotate(-90deg) scale(1);
-    }
 }
 
-/* 添加加载完成后的脉冲效果 */
+/* 加载完成后的脉冲效果 */
 @keyframes pulse {
     0%, 100% {
         transform: scale(1);
@@ -659,9 +704,23 @@ body::before {
     transition: all 0.3s ease;
 }
 
-/* 加载完成后添加脉冲动画 */
-.circular-progress.loaded .circular-fill {
+/* 动画控制类 */
+.circular-fill.progress-load {
+    animation: progress-load 1.5s ease-out forwards;
+}
+
+.circular-fill.progress-unload {
+    animation: progress-unload 1.5s ease-out forwards;
+}
+
+.circular-fill.loaded {
     animation: pulse 2s infinite;
+}
+
+.circular-fill {
+    stroke-dasharray: 251;
+    stroke-dashoffset: 251;
+    transition: all 0.3s ease;
 }
 
 /* 添加加载动画 */

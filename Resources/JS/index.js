@@ -168,15 +168,35 @@ async function initializeApp() {
     setBackgroundImage();
     createDockIcons();
 
-    // 初始化进度条显示（无动画）
-    const skillProgresses = document.querySelectorAll('.skill-progress');
-    skillProgresses.forEach(progress => {
-        const percentElement = progress.parentElement.parentElement.querySelector('.skill-percent');
-        const width = percentElement.textContent;
-        const fill = progress.querySelector('.circular-fill');
-        fill.style.strokeDashoffset = `calc(251 - (251 * ${width}) / 100)`;
-        progress.style.setProperty('--progress-width', width);
-    });
+    // 初始化进度条 - 简化版
+    const initProgressBars = () => {
+        const skills = [
+            { name: 'Markdown', percent: 80 },
+            { name: 'HTML', percent: 60 },
+            { name: 'CSS', percent: 45 },
+            { name: 'Python', percent: 40 },
+            { name: 'C', percent: 30 },
+            { name: 'Linux', percent: 35 }
+        ];
+
+        const cards = document.querySelectorAll('.skill-card');
+        cards.forEach((card, index) => {
+            const skill = skills[index];
+            const fill = card.querySelector('.circular-fill');
+            
+            // 直接设置stroke-dashoffset
+            const circumference = 251; // 2πr, r=40
+            const offset = circumference - (skill.percent / 100) * circumference;
+            fill.style.strokeDashoffset = offset;
+            
+            // 添加简单动画
+            fill.style.transition = 'stroke-dashoffset 1.5s ease-out';
+            fill.style.strokeDashoffset = offset;
+        });
+    };
+
+    // 页面加载后初始化
+    window.addEventListener('load', initProgressBars);
 
     // 初始化interests列表（无动画）
     const interestItems = document.querySelectorAll('.interests-list li');
