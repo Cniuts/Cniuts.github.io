@@ -517,218 +517,144 @@ body::before {
     text-align: left;
 }
 
-/* 新版圆形进度条样式 */
+/* 新版三列进度条样式 - 优化缩放布局 */
 .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-    gap: 20px;
-    padding: 20px;
-}
-
-.skill-card {
     display: flex;
     flex-direction: column;
+    gap: clamp(8px, 1.5vw, 12px); /* 使用clamp函数确保间距适应缩放 */
+    padding: clamp(15px, 2vw, 20px); /* 响应式内边距 */
+    max-width: min(90vw, 600px); /* 限制最大宽度并考虑视口宽度 */
+    min-width: unset; /* 移除固定最小宽度 */
+    width: auto; /* 自动宽度 */
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+/* 优化缩放时的进度条容器 */
+.linear-progress-container {
+    width: 100% !important; /* 使用百分比宽度 */
+    max-width: 500px;
+    height: clamp(10px, 1.2vw, 12px); /* 响应式高度 */
+}
+
+/* 处理极端缩放情况 */
+@media (max-width: 400px) {
+    .skill-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    
+    .skill-name, .skill-percent {
+        width: auto;
+        text-align: left;
+    }
+}
+
+/* 防止元素在缩放时重叠 */
+@media (max-height: 600px) {
+    .skills-grid {
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    
+    .skill-row {
+        padding: 4px 0;
+    }
+}
+
+.skill-row {
+    display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 15px;
-    backdrop-filter: blur(5px);
-    transition: all 0.3s ease;
-}
-
-.skill-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-.skill-icon {
-    width: 40px;
-    height: 40px;
-    margin-bottom: 10px;
+    gap: 10px;
+    padding: 8px 0;
 }
 
 .skill-name {
+    width: 100px;
     font-weight: bold;
-    margin-bottom: 10px;
-    text-align: center;
+    text-align: right;
 }
 
-.circular-progress {
+.skill-percent {
+    width: 50px;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+/* 条形进度条容器 */
+.linear-progress-container {
+    width: 500px !important;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    overflow: hidden;
     position: relative;
-    width: 80px;
-    height: 80px;
+    max-width: none !important;
 }
 
-.circular-progress svg {
-    width: 100%;
+/* 条形进度条 */
+.linear-progress-bar {
     height: 100%;
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    box-shadow: 0 0 8px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-.circular-progress circle {
-    fill: none;
-    stroke-width: 6;
-    stroke-linecap: round;
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
-}
-
-.circular-bg {
-    stroke: rgba(255, 255, 255, 0.2);
-}
-
-@keyframes progress-load {
-    0% {
-        stroke-dashoffset: 251;
-    }
-    100% {
-        stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
-    }
-}
-
-@keyframes progress-unload {
-    0% {
-        stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
-    }
-    100% {
-        stroke-dashoffset: 251;
-    }
-}
-
-.circular-fill {
-    stroke-dasharray: 251;
-    /* 初始值由JS设置 */
-    animation: progress-load 1.5s ease-out forwards;
-    animation-delay: 0.3s;
-    transition: stroke-dashoffset 0.8s ease-in-out;
-}
-
-.progress-load {
-    animation: progress-load 1.5s ease-out forwards;
-}
-
-.progress-unload {
-    animation: progress-unload 0.8s ease-in forwards;
-}
-
-.progress-value {
+/* 添加光晕效果 */
+.linear-progress-bar::after {
+    content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.2rem;
-    font-weight: bold;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0.3) 50%, 
+        rgba(255,255,255,0) 100%);
+    animation: shine 2s infinite;
 }
 
-/* 为每个技能设置不同颜色 */
-.circular-fill.markdown {
-    stroke: #4BC0C0;
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
-.circular-fill.html {
-    stroke: #FF6384;
+/* 优化后的进度条配色方案 */
+.linear-progress-bar {
+    /* 默认配色 - 现代蓝绿色 */
+    background: linear-gradient(90deg, #00D1B2, #00C4A7, #00B89C);
+}
+.linear-progress-bar.html {
+    /* HTML - 温暖的橙色 */
+    background: linear-gradient(90deg, #FF7D4D, #FF6B3C, #FF592B);
+}
+.linear-progress-bar.css {
+    /* CSS - 柔和的蓝色 */
+    background: linear-gradient(90deg, #4A89DC, #3B7DD8, #2C71D4);
+}
+.linear-progress-bar.python {
+    /* Python - 清新的青色 */
+    background: linear-gradient(90deg, #48C6EF, #37B9E6, #26ACDD);
+}
+.linear-progress-bar.c {
+    /* C - 专业深灰色 */
+    background: linear-gradient(90deg, #5D6D7E, #4D5D6E, #3D4D5E);
+}
+.linear-progress-bar.linux {
+    /* Linux - 活力的黄色 */
+    background: linear-gradient(90deg, #F6D365, #F5C84F, #F4BE39);
 }
 
-.circular-fill.css {
-    stroke: #36A2EB;
+/* 添加悬停效果增强视觉反馈 */
+.linear-progress-bar:hover {
+    filter: brightness(1.1);
+    transition: filter 0.3s ease;
 }
-
-.circular-fill.python {
-    stroke: #FFCD56;
-}
-
-.circular-fill.c {
-    stroke: #9966FF;
-}
-
-.circular-fill.linux {
-    stroke: #FF9F40;
-}
-
-/* 简化进度条动画 */
-.circular-fill {
-    stroke-dasharray: 251;
-    stroke-dashoffset: 251;
-    transform: rotate(-90deg);
-    transform-origin: 50% 50%;
-    transition: stroke-dashoffset 1s ease-out;
-}
-
-.circular-fill.progress-load {
-    stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
-}
-
-.circular-fill.progress-unload {
-    stroke-dashoffset: 251;
-}
-
-/* 进度条回退动画 */
-@keyframes progress-unload {
-    0% {
-        stroke-dashoffset: calc(251 - (251 * var(--progress-percent)) / 100);
-        opacity: 1;
-        transform: rotate(-90deg) scale(1);
-    }
-    50% {
-        opacity: 0.8;
-        transform: rotate(-90deg) scale(1.05);
-    }
-    100% {
-        stroke-dashoffset: 251;
-        opacity: 0;
-        transform: rotate(-90deg) scale(0.8);
-    }
-}
-
-/* 加载完成后的脉冲效果 */
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.05);
-        opacity: 0.8;
-    }
-}
-
-/* 悬停时增强效果 */
-.skill-card:hover .circular-fill {
-    stroke-width: 7;
-    transition: stroke-width 0.3s ease;
-}
-
-.skill-card:hover .progress-value {
-    font-size: 1.3rem;
-    color: white;
-    text-shadow: 0 0 10px rgba(255,255,255,0.7);
-    transition: all 0.3s ease;
-}
-
-/* 动画控制类 */
-.circular-fill.progress-load {
-    animation: progress-load 1.5s ease-out forwards;
-}
-
-.circular-fill.progress-unload {
-    animation: progress-unload 1.5s ease-out forwards;
-}
-
-.circular-fill.loaded {
-    animation: pulse 2s infinite;
-}
-
-.circular-fill {
-    stroke-dasharray: 251;
-    stroke-dashoffset: 251;
-    transition: all 0.3s ease;
-}
-
 /* 添加加载动画 */
-@keyframes progressLoad {
-    from { width: 0; }
-    to { width: var(--progress-width); }
-}
-
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -736,14 +662,6 @@ body::before {
 
 .personal-strength-content {
     animation: fadeIn 0.5s ease-out;
-}
-
-/* 增强进度条动画效果 */
-.personal-strength-list li .skill-progress {
-    animation: progressLoad 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 0.3s;
-    transform-origin: left;
-    box-shadow: 0 0 10px rgba(255,255,255,0.3);
 }
 
 /* 确保动画触发 */
