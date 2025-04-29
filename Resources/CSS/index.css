@@ -908,3 +908,62 @@ body::before {
         height: 12px;
     }
 }
+
+/* 兴趣爱好卡片容器 */
+.interest-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+/* 单个兴趣卡片 */
+.interest-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* 卡片hover效果 */
+.interest-card:hover {
+    transform: translateY(-5px);
+    background-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 兴趣图标 */
+.interest-icon {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+    object-fit: contain;
+}
+
+/* 兴趣文字 */
+.interest-text {
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .interest-cards {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 15px;
+    }
+    
+    .interest-card {
+        padding: 10px;
+    }
+    
+    .interest-icon {
+        width: 40px;
+        height: 40px;
+    }
+}

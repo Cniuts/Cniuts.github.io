@@ -343,7 +343,7 @@ async function initializeApp() {
             e.preventDefault(); // 阻止表单默认提交行为
             const query = searchInput.value.trim(); // 获取输入框内容并去除首尾空格
             if(query) { // 如果输入框不为空
-                window.open(`https://www.bing.com/search?q=${encodeURIComponent(query)}`, '_blank'); // 在新窗口打开Bing搜索结果
+                window.open(`https://cn.bing.com/search?q=${encodeURIComponent(query)}`, '_blank'); // 在新窗口打开Bing搜索结果
             }
         });
     }
