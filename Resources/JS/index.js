@@ -1,8 +1,8 @@
 const icons = [
     {
-        name: 'Github',
+        name: 'Github仓库',
         icon: 'Resources/Images/Icons/MdiGithub.png',
-        url: 'https://github.com'
+        url: 'https://github.com/Cniuts/Cniuts.github.io/'
     },
     {
         name: 'Bilibili',
@@ -76,19 +76,28 @@ function createDockIcons() {
     });
 }
 
-async function getHitokoto() {
-    const now = new Date();
-    const cacheKey = 'hitokoto_data';
-    const cacheExpireKey = 'hitokoto_expire';
+function isNewDay() {
+    const today = new Date().toDateString();
+    const lastDay = sessionStorage.getItem('hitokoto_day');
     
+    if (lastDay !== today) {
+        sessionStorage.setItem('hitokoto_day', today);
+        return true;
+    }
+    return false;
+}
+
+async function getHitokoto() {
     try {
-        const cachedData = localStorage.getItem(cacheKey);
-        const expireTime = localStorage.getItem(cacheExpireKey);
-        
-        if (cachedData && expireTime && now.getTime() < parseInt(expireTime)) {
-            return JSON.parse(cachedData);
+        // 检查是否新的一天
+        if (!isNewDay() && sessionStorage.getItem('hitokoto_text')) {
+            return {
+                text: sessionStorage.getItem('hitokoto_text'),
+                from: sessionStorage.getItem('hitokoto_from') || '',
+                uuid: sessionStorage.getItem('hitokoto_uuid') || null
+            };
         }
-        
+
         const apiEndpoints = [
             'https://v1.hitokoto.cn/',
             'https://international.v1.hitokoto.cn/'
@@ -112,18 +121,14 @@ async function getHitokoto() {
             from: data.from || '',
             uuid: data.uuid || null
         };
-        
-        if (data.from && data.from !== result.text) {
-            result.text += ` —— ${data.from}`;
+
+        // 存储当日一言
+        sessionStorage.setItem('hitokoto_text', result.text);
+        sessionStorage.setItem('hitokoto_from', result.from);
+        if (result.uuid) {
+            sessionStorage.setItem('hitokoto_uuid', result.uuid);
         }
-        
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
-        
-        localStorage.setItem(cacheKey, JSON.stringify(result));
-        localStorage.setItem(cacheExpireKey, tomorrow.getTime().toString());
-        
+
         return result;
     } catch (error) {
         console.error('获取一言失败:', error);
@@ -158,9 +163,26 @@ function updateTime() {
     dateElement.textContent = dateString;
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+// 主初始化函数
+async function initializeApp() {
     setBackgroundImage();
     createDockIcons();
+
+    // 初始化进度条显示（无动画）
+    const skillProgresses = document.querySelectorAll('.skill-progress');
+    skillProgresses.forEach(progress => {
+        const percentElement = progress.parentElement.parentElement.querySelector('.skill-percent');
+        const width = percentElement.textContent;
+        const fill = progress.querySelector('.circular-fill');
+        fill.style.strokeDashoffset = `calc(251 - (251 * ${width}) / 100)`;
+        progress.style.setProperty('--progress-width', width);
+    });
+
+    // 初始化interests列表（无动画）
+    const interestItems = document.querySelectorAll('.interests-list li');
+    interestItems.forEach(item => {
+        item.classList.add('animate');
+    });
 
     // 顶部渐变背景滚动效果
     window.addEventListener('scroll', function() {
@@ -175,11 +197,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const searchInput = document.querySelector('.home-container input[type="text"]');
     const hitokotoDisplay = document.getElementById('hitokoto-display');
     
-    const hitokotoData = await getHitokoto();
-    hitokotoDisplay.textContent = hitokotoData.text;
+    let hitokotoData;
+    try {
+        hitokotoData = await getHitokoto();
+    } catch (error) {
+        console.error('获取一言数据失败:', error);
+        hitokotoData = {
+            text: '微风迎客，软语半茶',
+            from: '初桐小栈',
+            uuid: null
+        };
+    }
+    hitokotoDisplay.textContent = hitokotoData.from 
+        ? `${hitokotoData.text} -- ${hitokotoData.from}`
+        : hitokotoData.text;
     
     if (hitokotoData.uuid) {
-        hitokotoDisplay.addEventListener('click', () => {
+        const hitokotoContainer = document.querySelector('.hitokoto-container');
+        hitokotoContainer.addEventListener('click', () => {
             window.open(`https://hitokoto.cn?uuid=${hitokotoData.uuid}`, '_blank');
         });
     }
@@ -190,13 +225,29 @@ document.addEventListener('DOMContentLoaded', async () => {
     const logoDock = document.querySelector('.logo-dock-container');
     if (logoDock) {
         logoDock.addEventListener('click', () => {
-            window.location.reload();
+            const duration = 500;
+            const start = window.pageYOffset;
+            const startTime = performance.now();
+            
+            function easeOutQuad(t) {
+                return t * (2 - t);
+            }
+            
+            function scrollToTop(timestamp) {
+                const elapsed = timestamp - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easedProgress = easeOutQuad(progress);
+                window.scrollTo(0, start - (start * easedProgress));
+                
+                if (progress < 1) {
+                    requestAnimationFrame(scrollToTop);
+                }
+            }
+            
+            requestAnimationFrame(scrollToTop);
         });
     }
     
-    // 信息面板交互
-    // 已移除info-panel展开功能
-
     if(searchForm) {
         searchForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -214,10 +265,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const itemWidth = dockItems[0].offsetWidth;
         const margin = parseInt(window.getComputedStyle(dockItems[0]).marginRight);
         const totalWidth = (itemWidth + margin * 2) * dockItems.length;
-        
         dock.style.minWidth = `${totalWidth}px`;
     }
     
     window.addEventListener('resize', updateDockSize);
     updateDockSize();
+}
+
+// 主入口
+document.addEventListener('DOMContentLoaded', () => {
+    initializeApp().catch(error => {
+        console.error('初始化应用失败:', error);
+    });
 });

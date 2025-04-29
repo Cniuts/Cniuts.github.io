@@ -1,38 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>初桐小栈Cniuts - 科技改变世界</title>
+    <title>初桐小栈Cniuts</title>
     <link rel="icon" href="Resources/Images/logo/logo_sqr_back_svg.svg">
     <link rel="stylesheet" href="Resources/CSS/index.css">
 </head>
+
 <body>
-
-
-    <!-- 底部容器 -->
-    <div class="bottom-container">
-        <!-- 左侧Dock Logo容器 -->
-        <div class="logo-dock-container">
-            <img src="Resources/Images/logo/logo_sqr_trans.png" alt="DocuCenter" class="dock-logo">
-        </div>
-
-        <!-- Dock栏 -->
-        <div class="dock">
-            <div class="dock-container"></div>
-        </div>
-        <div class="dock-mobile">
-            <div class="dock-indicator desktop">↓ 向下滚动</div>
-            <div class="dock-indicator mobile">↑ 向上滑动</div>
-            
-        </div>
-
-        <!-- 时间容器 -->
-        <div class="time-container">
-            <div id="current-time"></div>
-            <div id="current-date"></div>
-        </div>
-    </div>
 
     <!-- 顶部Logo -->
     <div class="logo-container">
@@ -46,36 +23,207 @@
             <section class="home-content">
                 <div class="welcome-text">
                     <p>欢迎来到初桐小栈Cniuts</p>
-                    
+
                 </div>
             </section>
-            
-            <form>
+
+            <form class="search-form">
                 <input type="text" placeholder="必应搜索" required>
                 <button type="submit">→</button>
             </form>
-            
+
         </div>
     </div>
 
     <!-- 一言显示 -->
-    <div class="hitokoto-text" id="hitokoto-display"></div>
+    <div class="hitokoto-container">
+        <div class="hitokoto-text" id="hitokoto-display"></div>
+    </div>
 
     <!-- 背景图片容器 -->
     <div id="background-container"></div>
 
+    <div class="dock-indicator-container">
+        <div class="dock-indicator desktop">↓ 向下滚动</div>
+        <div class="dock-indicator mobile">↑ 向上滑动</div>
+    </div>
+
+    <!-- 底部容器 -->
+    <div class="bottom-container">
+        <!-- 左侧Dock Logo容器 -->
+        <div class="logo-dock-container">
+            <img src="Resources/Images/logo/logo_sqr_trans.png" alt="回到顶部" class="dock-logo">
+        </div>
+
+        <!-- Dock栏 -->
+        <div class="dock">
+            <div class="dock-container"></div>
+        </div>
+
+
+        <!-- 时间容器 -->
+        <div class="time-container">
+            <div id="current-time"></div>
+            <div id="current-date"></div>
+        </div>
+    </div>
+
+
     <!-- 信息显示模块 -->
     <section class="info-panel">
-        <div class="info-content">
+        <div class="info-title">
             <h2>关于我们</h2>
+        </div>
+        <div class="info-content">
             <div class="info-text">
-                <p>初桐小栈Cniuts是一个专注于计算机技术的技术博客，我们提供各种计算机技术文章、教程、工具、资源，帮助广大技术爱好者快速入门计算机技术，并分享计算机技术的最新资讯。我们致力于为广大技术爱好者提供优质的计算机技术文章，力争做到“一站式”、“全方位”、“时尚”。</p>
-                
+                <p>以下是关于我们的一些信息</p>
+
                 <div class="info-more">
-                    <p>这里是更多详细内容...</p>
-                    <p>可以包含多段文字或其他内容</p>
+                    <p>（PS：内容仅供参考，不保证其100%真实性，请以实际情况为准~）</p>
                 </div>
             </div>
+        </div>
+    </section>
+
+
+    <!-- 基本信息模块 -->
+
+    <section class="basic-info">
+        <div class="basic-info-title">
+            <h2>基本信息</h2>
+        </div>
+        <div class="basic-info-content">
+            <div class="basic-info-text">
+                
+                <ul class="basic-info-list">
+                    <li>中文名：初桐</li>
+                    <li>英文名：Hatukiper</li>
+                    <li>出生年月：2009年07月</li>
+                    <li>国籍：中国</li>
+                    <li>单位：初桐小栈Cniuts</li>
+                    <li>职务：站主</li>
+
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 个人特长模块 -->
+     <section class="personal-strength">
+        <div class="personal-strength-title">
+            <h2>个人特长</h2>
+        </div>
+        <div class="personal-strength-content">
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <img src="Resources/Images/Icons/ArcticonsDeepseek.png" alt="Markdown" class="skill-icon">
+                    <span class="skill-name">Markdown</span>
+                    <div class="circular-progress" style="--progress-percent: 80">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="circular-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="circular-fill markdown" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <span class="progress-value">80%</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <img src="Resources/Images/Icons/MdiGithub.png" alt="HTML" class="skill-icon">
+                    <span class="skill-name">HTML</span>
+                    <div class="circular-progress" style="--progress-percent: 60">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="circular-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="circular-fill html" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <span class="progress-value">60%</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <img src="Resources/Images/Icons/RiBilibiliFill.png" alt="CSS" class="skill-icon">
+                    <span class="skill-name">CSS</span>
+                    <div class="circular-progress" style="--progress-percent: 45">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="circular-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="circular-fill css" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <span class="progress-value">45%</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <img src="Resources/Images/Icons/SimpleIconsDeepl.png" alt="Python" class="skill-icon">
+                    <span class="skill-name">Python</span>
+                    <div class="circular-progress" style="--progress-percent: 40">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="circular-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="circular-fill python" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <span class="progress-value">40%</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <img src="Resources/Images/Icons/MdiGithub.png" alt="C" class="skill-icon">
+                    <span class="skill-name">C</span>
+                    <div class="circular-progress" style="--progress-percent: 3">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="circular-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="circular-fill c" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <span class="progress-value">3%</span>
+                    </div>
+                </div>
+                <div class="skill-card">
+                    <img src="Resources/Images/Icons/RiBilibiliFill.png" alt="Linux" class="skill-icon">
+                    <span class="skill-name">Linux</span>
+                    <div class="circular-progress" style="--progress-percent: 1">
+                        <svg viewBox="0 0 100 100">
+                            <circle class="circular-bg" cx="50" cy="50" r="40"></circle>
+                            <circle class="circular-fill linux" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <span class="progress-value">1%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--兴趣爱好模块-->
+    <section class="interests">
+        <div class="interests-title">
+            <h2>兴趣爱好</h2>
+        </div>
+        <div class="interests-content">
+                <ul class="interests-list">
+                    <li>写作</li>
+                    <li>编程</li>
+                    <li>阅读</li>
+                    <li>刷视频</li>
+                    <li>幻想</li>
+                    <li>睡觉</li>
+                </ul>
+        </div>
+    </section>
+
+    <!-- 发展历程模块 -->
+    <section class="development-history">
+        <div class="development-history-title">
+            <h2>发展历程</h2>
+        </div>
+        <div class="development-history-content">
+            <ul class="development-history-list">
+                <li>2021年07月，初次接触计算机技术</li>
+                <li>2022年11月，初次了解GitHub及相关应用</li>
+                <li>2023年10月，初次接触HTML、CSS、JavaScript</li>
+                <li>2024年02月，个人主页第一版网站上线，Forked from <a href="https://i.dmego.cn">Dmego</a></li>
+                <li>2024年04月，初次接触Python</li>
+                <li>2024年03-06月，个人主页第二至第五版网站上线</li>
+                <li>2024年10月，初桐小栈HatsuSN成立</li>
+                <li>2024年10月，初桐小栈HatsuSN第六版主页上线</li>
+                <li>2024年11月，初桐小栈HatsuSN英文名改为Cniuts</li>
+                <li>2024年12月，初桐小栈Cniuts第七版主页上线</li>
+                <li>2025年01月，初次接触C语言、Linux</li>
+                <li>2025年02月，初次接触Markdown</li>
+                <li>2025年03月，文档中心DocuCenter正式上线</li>
+                <li>2025年04月，初桐小栈Cniuts第八版主页正式上线</li>
+            </ul>
         </div>
     </section>
 
@@ -85,6 +233,13 @@
 
 
 
-    <script src="Resources/JS/index.js"></script>
+
+
+
+
+    
+    
+    <script src="./Resources/JS/index.js"></script>
 </body>
+
 </html>
