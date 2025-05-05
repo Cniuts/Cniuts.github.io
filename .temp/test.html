@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>多形状时间轴</title>
+    <style>
+        /* 基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            padding: 4rem 0;
+            min-height: 100vh;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 时间轴基线 */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: rgba(0,0,0,0.1);
+            top: 2rem;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* 通用项样式 */
+        .item {
+            padding: 2rem 40px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            animation: fadeIn 0.6s forwards;
+        }
+
+        .content {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* 动画 */
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* ========== 形状方案 ========== */
+
+        /* 方案1：菱形节点 */
+        .shape-diamond .item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #4CAF50;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            z-index: 2;
+        }
+
+        .shape-diamond .item.left::after { right: -8px; }
+        .shape-diamond .item.right::after { left: -8px; }
+
+        /* 方案2：三角形节点 */
+        .shape-triangle .item::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .shape-triangle .item.left::after {
+            right: -12px;
+            border-width: 10px 0 10px 16px;
+            border-color: transparent transparent transparent #4CAF50;
+        }
+
+        .shape-triangle .item.right::after {
+            left: -12px;
+            border-width: 10px 16px 10px 0;
+            border-color: transparent #4CAF50 transparent transparent;
+        }
+
+        /* 方案3：进度圆环 */
+        .shape-ring .item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 4px solid #4CAF50;
+            border-radius: 50%;
+            background: white;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .shape-ring .item.left::after { right: -10px; }
+        .shape-ring .item.right::after { left: -10px; }
+
+        /* 方案4：方形标签 */
+        .shape-square .item::after {
+            content: attr(data-year);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #4CAF50;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .shape-square .item.left::after {
+            right: -80px;
+        }
+
+        .shape-square .item.right::after {
+            left: -80px;
+        }
+
+        /* 方案5：图标节点 (需要FontAwesome) */
+        .shape-icon .item::after {
+            content: '\f192'; /* 默认图标 */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4CAF50;
+            font-size: 1.4rem;
+        }
+
+        .shape-icon .item.left::after { right: -30px; }
+        .shape-icon .item.right::after { left: -30px; }
+
+        /* 方案6：动态点阵 */
+        .shape-dot .item::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: #4CAF50;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(76,175,80,0.4); }
+            100% { box-shadow: 0 0 0 12px rgba(76,175,80,0); }
+        }
+
+        .shape-dot .item.left::after { right: -8px; }
+        .shape-dot .item.right::after { left: -8px; }
+
+        /* 响应式布局 */
+        @media (max-width: 768px) {
+            .timeline::after { left: 30px; }
+            
+            .item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+                left: 0 !important;
+            }
+
+            /* 调整所有形状的位置 */
+            [class^="shape-"] .item::after {
+                left: 18px !important;
+                right: auto !important;
+            }
+
+            .shape-square .item::after { left: -40px !important; }
+            .shape-icon .item::after { left: -20px !important; }
+        }
+    </style>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <!-- 形状选择器 -->
+    <div style="text-align:center; margin-bottom: 2rem;">
+        <button onclick="changeShape('shape-diamond')">菱形</button>
+        <button onclick="changeShape('shape-triangle')">三角形</button>
+        <button onclick="changeShape('shape-ring')">圆环</button>
+        <button onclick="changeShape('shape-square')">方形标签</button>
+        <button onclick="changeShape('shape-icon')">图标</button>
+        <button onclick="changeShape('shape-dot')">动态点</button>
+    </div>
+
+    <!-- 时间轴容器 -->
+    <div class="timeline shape-diamond" id="timeline">
+        <div class="item left" data-year="2023">
+            <div class="content">
+                <h3>项目启动</h3>
+                <p>完成初期规划与资源分配</p>
+            </div>
+        </div>
+
+        <div class="item right" data-year="2023">
+            <div class="content">
+                <h3>设计阶段</h3>
+                <p>完成UI/UX设计和技术架构</p>
+            </div>
+        </div>
+
+        <div class="item left" data-year="2024">
+            <div class="content">
+                <h3>开发阶段</h3>
+                <p>核心功能模块开发完成</p>
+            </div>
+        </div>
+
+        <div class="item right" data-year="2024">
+            <div class="content">
+                <h3>项目上线</h3>
+                <p>正式版本发布</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function changeShape(shapeClass) {
+            const timeline = document.getElementById('timeline');
+            // 移除现有形状类
+            timeline.className = 'timeline ' + shapeClass;
+        }
+    </script>
+</body>
+</html>
