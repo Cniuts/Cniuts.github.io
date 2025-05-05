@@ -1,3 +1,7 @@
+
+
+
+
 // 定义一个包含多个图标对象的数组，每个图标对象包含名称、图片路径和链接
 const icons = [
     {
@@ -325,6 +329,7 @@ async function initializeApp() {
     // 初始化卡片动画
     setupCardAnimations();
 
+
     // 顶部渐变背景滚动效果
     window.addEventListener('scroll', function() { // 添加滚动事件监听器
         if (window.scrollY > 50) { // 如果垂直滚动距离大于50像素
@@ -333,6 +338,12 @@ async function initializeApp() {
             document.body.classList.remove('scrolling'); // 否则移除'scrolling'类
         }
     });
+
+
+
+
+
+
 
     // 获取搜索表单、搜索输入框和一言显示元素
     const searchForm = document.querySelector('.home-container form');

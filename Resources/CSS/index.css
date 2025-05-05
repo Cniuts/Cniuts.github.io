@@ -613,6 +613,27 @@ body::before {
     }
 }
 
+/* Development History Animation */
+.development-history-list li {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    transition: 
+        opacity 0.6s cubic-bezier(0.25, 0.1, 0.25, 1),
+        transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform, opacity;
+}
+
+.development-history-list li.animate {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: fadeInUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+.development-history-list li:hover {
+    transform: translateY(-3px) scale(1.03);
+    transition: transform 0.2s ease;
+}
+
 @keyframes lineGrow {
     from {
         height: 0;
@@ -930,6 +951,16 @@ body::before {
     will-change: transform, opacity;
 }
 
+.development-history-list a {
+    font-style: italic;
+    color: white;
+}
+
+.development-history-list a:hover {
+    color: #8ab4f8;
+    text-shadow: 0 2px 5px rgba(138, 180, 248, 0.3);
+}
+
 .development-history-list li:nth-child(1) { animation-delay: 0.1s; }
 .development-history-list li:nth-child(2) { animation-delay: 0.2s; }
 .development-history-list li:nth-child(3) { animation-delay: 0.3s; }
@@ -1149,35 +1180,25 @@ body::before {
     }
 }
 
+
 /* 页尾模块 */
 .footer {
     position: absolute;
-    bottom: -650%;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
+    bottom: -700%;
+    left: 50%;
+    transform: translateX(-50%);
     width: 50%;
-    max-width: 800px;
     z-index: 5;
-    opacity: 0;
-    animation: fadeInUp 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-    animation-delay: 0.8s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.footer-content {
-    width: 100%;
+    padding-bottom: 30%;
 }
 
 .footer-title {
     position: absolute;
     top: -35px;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
-    margin: 0 auto;
+    margin: 0;
     padding: 5px 0px;
     text-align: center;
     background: rgba(255, 255, 255, 0.3);
@@ -1186,12 +1207,11 @@ body::before {
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     z-index: 6;
-    transition: all 0.3s ease;
-    max-width: 800px;
 }
 
 .footer-title:hover {
     background: rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s ease;
 }
 
 .footer-title h2 {
@@ -1207,51 +1227,54 @@ body::before {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 12px;
-    padding: 25px;
+    padding: 20px;
     color: white;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: all 0.3s ease;
 }
 
 .footer-text {
     padding-bottom: 15px;
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-size: 16px;
+    
 }
 
 .footer-text a {
-    color: #8ab4f8;
-    text-decoration: none;
-    transition: all 0.3s ease;
+    font-style: italic;
+    color: white;
 }
 
 .footer-text a:hover {
-    color: #457dd4;
-    text-decoration: underline;
+    color: #8ab4f8;
+    text-shadow: 0 2px 5px rgba(138, 180, 248, 0.3);
 }
 
 .copyright {
-    padding-top: 15px;
-    font-size: 0.9rem;
-    opacity: 0.8;
+    font-size: 1.2rem;
+    color: white;
+    text-align: center;
+    margin-top: 20px;
 }
+
+
+
 
 /* 响应式设计 */
 @media (max-width: 768px) {
     .footer {
         width: 80%;
+        bottom: -700%;
+    }
+
+    .footer-title {
+        font-size: 1.5rem;
     }
 
     .footer-content {
-        padding: 20px;
+        padding: 15px;
     }
 
     .footer-text {
-        font-size: 1rem;
-    }
-
-    .copyright {
-        font-size: 0.8rem;
+        font-size: 14px;
     }
 }
