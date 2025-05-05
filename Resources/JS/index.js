@@ -217,7 +217,7 @@ async function initializeApp() {
             setTimeout(() => {
                 progressBar.style.transition = 'width 1s ease-out';
                 progressBar.style.width = `${percent}%`;
-                console.log(`Animated ${card.querySelector('.skill-name').textContent} to ${percent}%`);
+                // 静默执行初始化动画
             }, 100);
         });
     };
@@ -230,29 +230,88 @@ async function initializeApp() {
     // 初始化interests列表（无动画）
     // 进度条视口动画触发逻辑
     const setupProgressBarAnimations = () => {
-        const progressContainers = document.querySelectorAll('.linear-progress-container');
+        const personalStrengthSection = document.querySelector('.personal-strength');
+        const skillRows = document.querySelectorAll('.skill-row');
         
+        // 为每个进度条创建状态对象
+        const progressBars = Array.from(skillRows).map((row, index) => {
+            const bar = row.querySelector('.linear-progress-bar');
+            const percentElement = row.querySelector('.skill-percent');
+            const percent = percentElement ? parseInt(percentElement.textContent) : 0;
+            
+            return {
+                element: bar,
+                targetPercent: percent,
+                currentPercent: 0,
+                isResetting: false,
+                delay: 0.1 + (index * 0.05),
+                resetTimeout: null
+            };
+        });
+
+        // 初始化进度条宽度为0
+        progressBars.forEach(barData => {
+            barData.element.style.width = '0%';
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                progressBars.forEach(barData => {
+                    // 清除之前的重置超时
+                    clearTimeout(barData.resetTimeout);
+                    
+                    if (entry.isIntersecting) {
+                        // 进入视口 - 开始填充动画
+                        barData.isResetting = false;
+                        barData.element.style.transition = `width 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) ${barData.delay}s`;
+                        barData.element.style.width = `${barData.targetPercent}%`;
+                        barData.currentPercent = barData.targetPercent;
+                        // 静默执行动画
+                    } else {
+                        // 离开视口 - 立即重置（无动画）
+                        barData.isResetting = true;
+                        barData.element.style.transition = 'none';
+                        barData.element.style.width = '0%';
+                        barData.currentPercent = 0;
+                        // 静默执行重置
+                    }
+                });
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        if (personalStrengthSection) {
+            observer.observe(personalStrengthSection);
+        }
+    };
+
+    // 卡片动画设置
+    const setupCardAnimations = () => {
+        const cards = document.querySelectorAll('.interest-card');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // 进入视口时添加动画类
-                    entry.target.classList.add('in-viewport');
-                    // 重置动画以便可以重复触发
-                    const progressBar = entry.target.querySelector('.linear-progress-bar');
-                    progressBar.style.animation = 'none';
-                    void progressBar.offsetWidth; // 触发重绘
-                    progressBar.style.animation = 'progress-load 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards';
+                    // 使用classList添加.show类触发CSS动画
+                    requestAnimationFrame(() => {
+                        entry.target.classList.add('show');
+                    });
                 } else {
-                    // 离开视口时移除动画类
-                    entry.target.classList.remove('in-viewport');
+                    // 离开视口时移除.show类
+                    entry.target.classList.remove('show');
                 }
             });
         }, {
-            threshold: 0.1 // 当10%的元素可见时触发
+            threshold: 0.2,
+            rootMargin: '0px 0px -50px 0px'
         });
 
-        progressContainers.forEach(container => {
-            observer.observe(container);
+        cards.forEach(card => {
+            // 确保初始状态与CSS一致
+            card.style.willChange = 'transform, opacity';
+            card.classList.remove('show');
+            observer.observe(card);
         });
     };
 
@@ -263,6 +322,8 @@ async function initializeApp() {
 
     // 初始化进度条动画
     setupProgressBarAnimations();
+    // 初始化卡片动画
+    setupCardAnimations();
 
     // 顶部渐变背景滚动效果
     window.addEventListener('scroll', function() { // 添加滚动事件监听器
@@ -363,6 +424,11 @@ async function initializeApp() {
     // 添加窗口大小调整事件监听器，调整窗口大小时更新Dock栏宽度
     window.addEventListener('resize', updateDockSize);
     updateDockSize(); // 初始化Dock栏宽度
+
+    // 延迟执行确保DOM完全加载
+    setTimeout(() => {
+        // 空函数，原debugHover调用已移除
+    }, 1000);
 }
 
 // 主入口，当DOM内容加载完成后执行初始化函数

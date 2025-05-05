@@ -593,14 +593,50 @@ body::before {
     max-width: none !important;
 }
 
+@keyframes progress-load {
+    0% {
+        width: 0% !important;
+    }
+    100% {
+        width: var(--target-width) !important;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes lineGrow {
+    from {
+        height: 0;
+    }
+    to {
+        height: 100%;
+    }
+}
+
 /* 条形进度条 */
 .linear-progress-bar {
     height: 100%;
     border-radius: 6px;
-    transition: width 0.5s ease;
+    transition: width 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition-delay: var(--animation-delay, 0s);
+    animation: none;
+    --target-width: 0%;
     box-shadow: 0 0 8px rgba(0,0,0,0.3);
     position: relative;
     overflow: hidden;
+}
+
+.linear-progress-bar[style*="width"] {
+    --target-width: attr(style width);
 }
 
 /* 添加光晕效果 */
@@ -743,6 +779,74 @@ body::before {
     text-align: center;
 }
 
+/* 卡片动画和交互效果 - 平衡版 */
+.interest-card {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: 
+        opacity 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+        transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform, opacity;
+}
+
+.interest-card.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: cardSubtleBounce 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@keyframes cardSubtleBounce {
+    0% { 
+        transform: translateY(20px) scale(0.95);
+    }
+    50% { 
+        transform: translateY(-5px) scale(1.02);
+    }
+    100% { 
+        transform: translateY(0) scale(1);
+    }
+}
+
+.interest-card:hover {
+    transform: translateY(-5px) scale(1.05);
+    transition: transform 0.15s ease-out;
+}
+
+/* 统一卡片悬停效果 */
+.interest-card {
+    transition: 
+        opacity 0.15s ease-out,
+        transform 0.15s ease-out,
+        box-shadow 0.15s ease-out,
+        background-color 0.15s ease-out;
+}
+
+.interest-card:hover {
+    transform: translateY(-8px) scale(1.05) rotate(1deg);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    transition: 
+        transform 0.15s cubic-bezier(0.18, 0.89, 0.32, 1.28),
+        box-shadow 0.15s ease-out,
+        background-color 0.15s ease-out;
+}
+
+.interest-card:hover .interest-text {
+    color: #457dd4;
+    font-weight: bold;
+    transform: scale(1.05);
+    transition: transform 0.15s ease-out;
+}
+
+.interest-card:hover .interest-icon {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2)) brightness(1.1);
+    transform: scale(1.1) rotate(4deg);
+    transition: 
+        transform 0.15s ease-out,
+        filter 0.15s ease-out;
+}
+
 /* 发展历程模块 */
 .development-history {
     position: absolute;
@@ -804,9 +908,14 @@ body::before {
     position: absolute;
     top: 0;
     left: 20px;
-    height: 100%;
+    height: 0;
     width: 2px;
-    background: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.8), 
+        rgba(255, 255, 255, 0.4));
+    animation: lineGrow 1.2s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    animation-delay: 0.3s;
+    transform-origin: top;
 }
 
 .development-history-list li {
@@ -814,6 +923,31 @@ body::before {
     padding-left: 40px;
     margin-bottom: 25px;
     color: white;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    animation: fadeInUp 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform, opacity;
+}
+
+.development-history-list li:nth-child(1) { animation-delay: 0.1s; }
+.development-history-list li:nth-child(2) { animation-delay: 0.2s; }
+.development-history-list li:nth-child(3) { animation-delay: 0.3s; }
+.development-history-list li:nth-child(4) { animation-delay: 0.4s; }
+.development-history-list li:nth-child(5) { animation-delay: 0.5s; }
+.development-history-list li:nth-child(6) { animation-delay: 0.6s; }
+.development-history-list li:nth-child(7) { animation-delay: 0.7s; }
+.development-history-list li:nth-child(8) { animation-delay: 0.8s; }
+.development-history-list li:nth-child(9) { animation-delay: 0.9s; }
+.development-history-list li:nth-child(10) { animation-delay: 1.0s; }
+.development-history-list li:nth-child(11) { animation-delay: 1.1s; }
+.development-history-list li:nth-child(12) { animation-delay: 1.2s; }
+.development-history-list li:nth-child(13) { animation-delay: 1.3s; }
+
+.development-history-list li:hover {
+    transform: translateY(-3px) scale(1.03);
+    color: #8ab4f8;
+    text-shadow: 0 2px 5px rgba(138, 180, 248, 0.3);
 }
 
 .development-history-list li:last-child {
@@ -828,13 +962,38 @@ body::before {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.8);
-    border: 3px solid rgba(69, 125, 212, 0.8);
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid rgba(69, 125, 212, 0.9);
+    box-shadow: 0 0 0 rgba(69, 125, 212, 0.5);
+    transform: scale(0.8);
+    transition: all 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation: pulse 2s infinite;
+    animation-delay: calc(var(--animation-order) * 0.1s + 0.5s);
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(69, 125, 212, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(69, 125, 212, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(69, 125, 212, 0);
+    }
+}
+
+.development-history-list li:hover::before {
+    background: rgba(69, 125, 212, 0.9);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(69, 125, 212, 0.5);
+    animation: none;
 }
 
 .development-history-list li:hover::before {
     background: rgba(69, 125, 212, 0.8);
-    transform: scale(1.1);
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(69, 125, 212, 0.5);
 }
 
 /* 响应式设计 */
@@ -925,15 +1084,37 @@ body::before {
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     padding: 15px;
-    transition: all 0.3s ease;
     cursor: pointer;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+/* 卡片hover效果 */
+.interest-card {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+.interest-card:hover {
+    transform: translateY(-5px) translateZ(0);
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s cubic-bezier(0.18, 0.89, 0.32, 1.28),
+                background-color 0.1s ease-out,
+                box-shadow 0.1s ease-out;
 }
 
 /* 卡片hover效果 */
 .interest-card:hover {
     transform: translateY(-5px);
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.interest-card:hover .interest-text {
+    color: #457dd4;
+    font-weight: bold;
 }
 
 /* 兴趣图标 */
@@ -965,5 +1146,112 @@ body::before {
     .interest-icon {
         width: 40px;
         height: 40px;
+    }
+}
+
+/* 页尾模块 */
+.footer {
+    position: absolute;
+    bottom: -650%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: 50%;
+    max-width: 800px;
+    z-index: 5;
+    opacity: 0;
+    animation: fadeInUp 0.8s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+    animation-delay: 0.8s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-content {
+    width: 100%;
+}
+
+.footer-title {
+    position: absolute;
+    top: -35px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    margin: 0 auto;
+    padding: 5px 0px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(15px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 6;
+    transition: all 0.3s ease;
+    max-width: 800px;
+}
+
+.footer-title:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.footer-title h2 {
+    margin: 0;
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.footer-content {
+    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 25px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.footer-text {
+    padding-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.footer-text a {
+    color: #8ab4f8;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer-text a:hover {
+    color: #457dd4;
+    text-decoration: underline;
+}
+
+.copyright {
+    padding-top: 15px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .footer {
+        width: 80%;
+    }
+
+    .footer-content {
+        padding: 20px;
+    }
+
+    .footer-text {
+        font-size: 1rem;
+    }
+
+    .copyright {
+        font-size: 0.8rem;
     }
 }
