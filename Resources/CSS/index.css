@@ -39,7 +39,7 @@ body::before {
     font-size: 0.9rem;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
     z-index: 10;
-    max-width: 500px;
+    max-width: 100%;
     text-align: right;
 }
 
@@ -442,6 +442,7 @@ body::before {
 }
 
 .basic-info-list li:hover {
+    /*background: rgba(255, 255, 255, 1);*/
     transform: translateX(5px);
     transition: transform 0.3s ease;
 }
@@ -453,7 +454,7 @@ body::before {
     bottom: 0;
     left: 30px;
     width: 6px;
-    background: #eee9dc;
+    background: white;
     z-index: 1;
 }
 
@@ -480,13 +481,17 @@ body::before {
     font-size: 0.9rem;
     font-weight: bold;
     transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.9);
+    background: white;
     border-radius: 7px;
     padding: 4px 8px;
     margin: 5px 2px;
 }
 
-
+.development-history-list a {
+    color: white;
+    text-decoration: underline;
+    font-style: italic;
+}
 
 .development-history-list .content {
     background: rgba(255, 255, 255, 0.1);
@@ -503,7 +508,7 @@ body::before {
 }
 
 .development-history-list li:hover .content {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 1);
     transform: translateX(5px);
 }
 
@@ -563,7 +568,8 @@ body::before {
     animation-delay: 1.4s;
 }
 
-.development-history-list li:hover {
+.development-history-list li:hover,
+.development-history-list li:hover a{
     transform: translateY(-8px) scale(1.05);
     color: #8ab4f8;
     text-shadow: 0 2px 5px rgba(138, 180, 248, 0.3);
@@ -574,18 +580,15 @@ body::before {
     margin-bottom: 0;
 }
 
-
-
-.development-history-list a,
 .footer-text a {
     font-style: italic;
     color: white;
 }
 
-.development-history-list a:hover,
 .footer-text a:hover {
     color: #8ab4f8;
     text-shadow: 0 2px 5px rgba(138, 180, 248, 0.3);
+    transition: all 0.3s ease;
 }
 
 /* ================= 技能进度条 ================= */
