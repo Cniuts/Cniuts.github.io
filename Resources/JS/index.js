@@ -3,7 +3,8 @@ const icons = [
     { name: 'Github仓库', icon: 'Resources/Images/Icons/MdiGithub.png', url: 'https://github.com/Cniuts/Cniuts.github.io/' },
     { name: 'Bilibili', icon: 'Resources/Images/Icons/RiBilibiliFill.png', url: 'https://www.bilibili.com' },
     { name: 'Deepseek', icon: 'Resources/Images/Icons/ArcticonsDeepseek.png', url: 'https://chat.deepseek.com' },
-    { name: 'Deepl', icon: 'Resources/Images/Icons/SimpleIconsDeepl.png', url: 'https://deepl.com' }
+    { name: 'Deepl', icon: 'Resources/Images/Icons/SimpleIconsDeepl.png', url: 'https://deepl.com' },
+    { name: 'Excalidraw', icon: 'Resources/Images/Icons/Excalidraw.svg', url: 'https://excalidraw.com' }
 ];
 
 // Dock栏功能
